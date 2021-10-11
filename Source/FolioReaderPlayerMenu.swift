@@ -125,9 +125,9 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
                                          ])
         playbackRate.delegate = self
         playbackRate.tag = 2
-        playbackRate.addSegmentWithTitle("½x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("0.5x", onSelectionImage: nil, offSelectionImage: nil)
         playbackRate.addSegmentWithTitle("1x", onSelectionImage: nil, offSelectionImage: nil)
-        playbackRate.addSegmentWithTitle("1½x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("1.5x", onSelectionImage: nil, offSelectionImage: nil)
         playbackRate.addSegmentWithTitle("2x", onSelectionImage: nil, offSelectionImage: nil)
         playbackRate.segmentTitleFont = UIFont(name: "Avenir-Light", size: 17)!
         playbackRate.selectSegmentAtIndex(Int(self.folioReader.currentAudioRate))
