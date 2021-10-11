@@ -181,19 +181,13 @@ open class FolioReaderConfig: NSObject {
     /// Realm configuration for storing highlights
     open var realmConfiguration = Realm.Configuration(schemaVersion: 2)
 
-    // MARK: Localized strings
-
-    /// Localizes Highlight title
-    open var localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
-
-    /// Localizes Content title
-    open var localizedContentsTitle = NSLocalizedString("Contents", comment: "")
-
     /// Use the readers `UIMenuController` which enables the highlighting etc. The default is `true`. If set to false it's possible to modify the shared `UIMenuController` for yourself. Note: This doesn't disable the text selection in the web view.
     open var useReaderMenuController = true
 
     /// Used to distinguish between multiple or different reader instances. The content of the user defaults (font settings etc.) depends on this identifier. The default is `nil`.
     open var identifier: String?
+
+    // MARK: Localized strings
 
     /// Localizes Highlight date format. This is a `dateFormat` from `NSDateFormatter`, so be careful 🤔
     open var localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
@@ -224,6 +218,8 @@ open class FolioReaderConfig: NSObject {
     open var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
     open var localizedSave = NSLocalizedString("Save", comment: "")
     open var localizedHighlightNote = NSLocalizedString("Note", comment: "")
+    open var localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
+    open var localizedContentsTitle = NSLocalizedString("Contents", comment: "")
 
     public convenience init(withIdentifier identifier: String) {
         self.init()
