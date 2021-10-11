@@ -55,6 +55,8 @@ open class FolioReaderContainer: UIViewController {
         if self.epubPath != "" {
             self.initialization()
         }
+
+        self.modalPresentationStyle = .fullScreen
     }
 
     required public init?(coder aDecoder: NSCoder) {
