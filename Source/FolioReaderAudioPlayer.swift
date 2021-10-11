@@ -401,7 +401,9 @@ open class FolioReaderAudioPlayer: NSObject {
     }
 
     func readCurrentSentence() {
-        guard synthesizer != nil else { return speakSentence() }
+        guard synthesizer != nil else {
+            return speakSentence()
+        }
 
         if synthesizer.isPaused {
             playing = true
