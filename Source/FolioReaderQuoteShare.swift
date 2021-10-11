@@ -135,11 +135,11 @@ class FolioReaderQuoteShare: UIViewController {
         // Configure layout contraints
         var constraints = [NSLayoutConstraint]()
         let views = [
-            "quoteLabel": self.quoteLabel,
-            "titleLabel": self.titleLabel,
-            "authorLabel": self.authorLabel,
-            "logoImageView": self.logoImageView
-            ] as [String : Any]
+            "quoteLabel": self.quoteLabel!,
+            "titleLabel": self.titleLabel!,
+            "authorLabel": self.authorLabel!,
+            "logoImageView": self.logoImageView!
+        ] as [String : Any]
 
         NSLayoutConstraint.constraints(withVisualFormat: "V:|-40-[quoteLabel]-20-[titleLabel]", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
         NSLayoutConstraint.constraints(withVisualFormat: "V:[titleLabel]-0-[authorLabel]", options: [], metrics: nil, views: views).forEach { constraints.append($0) }

@@ -10,7 +10,7 @@ import UIKit
 import ZFDragableModalTransition
 
 /// Protocol which is used from `FolioReaderCenter`s.
-@objc public protocol FolioReaderCenterDelegate: class {
+@objc public protocol FolioReaderCenterDelegate: AnyObject {
 
     /// Notifies that a page appeared. This is triggered when a page is chosen and displayed.
     ///
@@ -153,6 +153,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = background
+        collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
         enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
@@ -176,8 +177,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Register cell classes
         collectionView?.register(FolioReaderPage.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
 
-        // Configure navigation bar and layout
-        automaticallyAdjustsScrollViewInsets = false
         extendedLayoutIncludesOpaqueBars = true
         configureNavBar()
 

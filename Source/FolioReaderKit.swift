@@ -73,7 +73,7 @@ public enum MediaOverlayStyle: Int {
 }
 
 /// FolioReader actions delegate
-@objc public protocol FolioReaderDelegate: class {
+@objc public protocol FolioReaderDelegate: AnyObject {
     
     /// Did finished loading book.
     ///
