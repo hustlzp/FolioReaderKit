@@ -132,7 +132,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                                      separatorColour: self.readerConfig.nightModeSeparatorColor,
                                      separatorWidth: 1,
                                      segmentProperties:  [
-                                        keySegmentTitleFont: UIFont(name: "Avenir-Light", size: 17)!,
+                                        keySegmentTitleFont: UIFont.systemFont(ofSize: 17),
                                         keySegmentOnSelectionColour: UIColor.clear,
                                         keySegmentOffSelectionColour: UIColor.clear,
                                         keySegmentOnSelectionTextColour: selectedColor,
