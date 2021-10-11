@@ -108,13 +108,23 @@ class FolioReaderChapterList: UITableViewController {
             let reference = self.book.spine.spineReferences[safe: currentPageNumber - 1],
             (tocReference.resource != nil) {
             let resource = reference.resource
-            cell.indexLabel?.textColor = (tocReference.resource == resource ? self.readerConfig.menuTextColorSelected : self.readerConfig.menuTextColor)
+            let isCurrent = (tocReference.resource == resource)
+            cell.indexLabel?.textColor = isCurrent
+            ? self.readerConfig.menuTextColorSelected
+            : (isSection
+               ? readerConfig.menuSectionTextColor
+               : readerConfig.menuTextColor)
+            cell.indexLabel?.font = UIFont.systemFont(
+                ofSize: 17,
+                weight: isCurrent || isSection ? .medium : .regular
+            )
         }
 
         cell.layoutMargins = UIEdgeInsets.zero
         cell.preservesSuperviewLayoutMargins = false
         cell.contentView.backgroundColor = isSection ? UIColor(white: 0.7, alpha: 0.1) : UIColor.clear
         cell.backgroundColor = UIColor.clear
+
         return cell
     }
 
