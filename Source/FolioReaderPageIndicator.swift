@@ -105,6 +105,10 @@ class FolioReaderPageIndicator: UIView {
         }
         
         reloadView(updateShadow: false)
+
+        // TODO: rebuild bottom controls logic
+        pagesLabel.isHidden = true
+        minutesLabel.isHidden = true
     }
 }
 
