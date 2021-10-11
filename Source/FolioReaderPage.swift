@@ -44,8 +44,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     open var webView: FolioReaderWebView?
 
     fileprivate var colorView: UIView!
-    fileprivate var shouldShowBar = true
-    fileprivate var menuIsVisible = false
+    fileprivate var isMenuVisible = false
 
     fileprivate var readerConfig: FolioReaderConfig {
         guard let readerContainer = readerContainer else { return FolioReaderConfig() }
@@ -233,15 +232,12 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         guard let url = request.url else { return false }
 
         if scheme == "highlight" || scheme == "highlight-with-note" {
-            shouldShowBar = false
-
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
             let index = decoded.index(decoded.startIndex, offsetBy: 12)
             let rect = NSCoder.cgRect(for: String(decoded[index...]))
 
             webView.createMenu(options: true)
             webView.setMenuVisible(true, andRect: rect)
-            menuIsVisible = true
 
             return false
         } else if scheme == "play-audio" {
@@ -369,7 +365,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
     @objc open func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
         self.delegate?.pageTap?(recognizer)
-        
         if let _navigationController = self.folioReader.readerCenter?.navigationController, (_navigationController.isNavigationBarHidden == true) {
             let selected = webView?.js("getSelectedText()")
             
@@ -379,15 +374,16 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
             let delay = 0.4 * Double(NSEC_PER_SEC) // 0.4 seconds * nanoseconds per seconds
             let dispatchTime = (DispatchTime.now() + (Double(Int64(delay)) / Double(NSEC_PER_SEC)))
-            
+
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                if (self.shouldShowBar == true && self.menuIsVisible == false) {
+                if self.isMenuVisible == UIMenuController.shared.isMenuVisible {
                     self.folioReader.readerCenter?.toggleBars()
+                } else {
+                    self.isMenuVisible = UIMenuController.shared.isMenuVisible
                 }
             })
         } else if (self.readerConfig.shouldHideNavigationOnTap == true) {
             self.folioReader.readerCenter?.hideBars()
-            self.menuIsVisible = false
         }
     }
 
