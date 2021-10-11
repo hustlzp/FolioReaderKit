@@ -42,7 +42,9 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         view.addGestureRecognizer(tapGesture)
 
         // Menu view
-        menuView = UIView(frame: CGRect(x: 0, y: view.frame.height-165, width: view.frame.width, height: view.frame.height))
+        let bottomInset = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+        let visibleHeight: CGFloat = 165 + bottomInset
+        menuView = UIView(frame: CGRect(x: 0, y: view.frame.height - visibleHeight, width: view.frame.width, height: view.frame.height))
         menuView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeNavBackground, self.readerConfig.daysModeNavBackground)
         menuView.autoresizingMask = .flexibleWidth
         menuView.layer.shadowColor = UIColor.black.cgColor
@@ -120,7 +122,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
                                             keySegmentOnSelectionTextColour: selectedColor,
                                             keySegmentOffSelectionTextColour: normalColor,
                                             keyContentVerticalMargin: 17 as AnyObject
-            ])
+                                         ])
         playbackRate.delegate = self
         playbackRate.tag = 2
         playbackRate.addSegmentWithTitle("½x", onSelectionImage: nil, offSelectionImage: nil)
@@ -164,12 +166,12 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
             NSAttributedString.Key.foregroundColor: normalColor,
             NSAttributedString.Key.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.single.rawValue,
             NSAttributedString.Key.underlineColor: normalColor
-            ]), for: UIControl.State())
+        ]), for: UIControl.State())
         style1.setAttributedTitle(NSAttributedString(string: self.readerConfig.localizedPlayerMenuStyle, attributes: [
             NSAttributedString.Key.foregroundColor: self.folioReader.isNight(UIColor.white, UIColor.black),
             NSAttributedString.Key.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.single.rawValue,
             NSAttributedString.Key.underlineColor: selectedColor
-            ]), for: .selected)
+        ]), for: .selected)
         menuView.addSubview(style1);
 
         let style2 = UIButton(frame: CGRect(x: view.frame.width/1.5, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
