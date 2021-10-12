@@ -157,10 +157,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
         enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
-        
-        if #available(iOS 11.0, *) {
-            collectionView.contentInsetAdjustmentBehavior = .never
-        }
+
+        collectionView.contentInsetAdjustmentBehavior = .never
 
         // Activity Indicator
         self.activityIndicator.style = .gray
@@ -170,9 +168,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.view.addSubview(self.activityIndicator)
         self.view.bringSubviewToFront(self.activityIndicator)
 
-        if #available(iOS 10.0, *) {
-            collectionView.isPrefetchingEnabled = false
-        }
+        collectionView.isPrefetchingEnabled = false
 
         // Register cell classes
         collectionView?.register(FolioReaderPage.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
@@ -235,10 +231,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     fileprivate func frameForPageIndicatorView() -> CGRect {
         var bounds = CGRect(x: 0, y: screenBounds.size.height-pageIndicatorHeight, width: screenBounds.size.width, height: pageIndicatorHeight)
-        
-        if #available(iOS 11.0, *) {
-            bounds.size.height = bounds.size.height + view.safeAreaInsets.bottom
-        }
+
+        bounds.size.height = bounds.size.height + view.safeAreaInsets.bottom
         
         return bounds
     }
@@ -448,9 +442,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         cell.setup(withReaderContainer: readerContainer)
         cell.pageNumber = indexPath.row+1
         cell.webView?.scrollView.delegate = self
-        if #available(iOS 11.0, *) {
-            cell.webView?.scrollView.contentInsetAdjustmentBehavior = .never
-        }
+        cell.webView?.scrollView.contentInsetAdjustmentBehavior = .never
         cell.webView?.setupScrollDirection()
         cell.webView?.frame = cell.webViewFrame()
         cell.delegate = self
@@ -501,14 +493,12 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var size = CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
-        
-        if #available(iOS 11.0, *) {
-            let orientation = UIDevice.current.orientation
-            
-            if orientation == .portrait || orientation == .portraitUpsideDown {
-                if readerConfig.scrollDirection == .horizontal {
-                    size.height = size.height - view.safeAreaInsets.bottom
-                }
+
+        let orientation = UIDevice.current.orientation
+
+        if orientation == .portrait || orientation == .portraitUpsideDown {
+            if readerConfig.scrollDirection == .horizontal {
+                size.height = size.height - view.safeAreaInsets.bottom
             }
         }
         
@@ -1496,10 +1486,8 @@ extension FolioReaderCenter: FolioReaderChapterListDelegate {
     
     func getScreenBounds() -> CGRect {
         var bounds = view.frame
-        
-        if #available(iOS 11.0, *) {
-            bounds.size.height = bounds.size.height - view.safeAreaInsets.bottom
-        }
+
+        bounds.size.height = bounds.size.height - view.safeAreaInsets.bottom
         
         return bounds
     }
