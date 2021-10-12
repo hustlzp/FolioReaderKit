@@ -119,21 +119,31 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     }
 
     func webViewFrame() -> CGRect {
-        guard (self.readerConfig.hideBars == false) else {
+        guard !readerConfig.hideBars else {
             return bounds
         }
 
         let statusbarHeight = UIApplication.shared.statusBarFrame.size.height
-        let navBarHeight = self.folioReader.readerCenter?.navigationController?.navigationBar.frame.size.height ?? CGFloat(0)
-        let navTotal = self.readerConfig.shouldHideNavigationOnTap ? 0 : statusbarHeight + navBarHeight
-        let paddingTop: CGFloat = 20
-        let paddingBottom: CGFloat = 30
+        let navBarHeight: CGFloat = folioReader.readerCenter?.navigationController?.navigationBar.frame.size.height ?? 0
+        let navTotal = readerConfig.shouldHideNavigationOnTap ? 0 : statusbarHeight + navBarHeight
+        let safeAreaInsetTop: CGFloat = UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0
+        let safeAreaInsetBottom: CGFloat = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+        let paddingTop: CGFloat = safeAreaInsetTop > 0 ? safeAreaInsetTop : 20
+        let paddingBottom: CGFloat = safeAreaInsetBottom > 0 ? safeAreaInsetBottom : 30
 
         return CGRect(
             x: bounds.origin.x,
-            y: self.readerConfig.isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop, bounds.origin.y + navTotal),
+            y: readerConfig.isDirection(
+                bounds.origin.y + navTotal,
+                bounds.origin.y + navTotal + paddingTop,
+                bounds.origin.y + navTotal
+            ),
             width: bounds.width,
-            height: self.readerConfig.isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom, bounds.height - navTotal)
+            height: readerConfig.isDirection(
+                bounds.height - navTotal,
+                bounds.height - navTotal - paddingTop - paddingBottom,
+                bounds.height - navTotal
+            )
         )
     }
 
@@ -412,7 +422,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         )
 
         if bottomOffset.forDirection(withConfiguration: readerConfig) >= 0 {
-            webView.stringByEvaluatingJavaScript(from: "window.scrollTo(\(bottomOffset.x), \(bottomOffset.y));")
+            webView.stringByEvaluatingJavaScript(
+                from: "window.scrollTo(\(bottomOffset.x), \(bottomOffset.y));"
+            )
         }
     }
 
