@@ -216,8 +216,11 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             }
         }
 
-        let direction: ScrollDirection = self.folioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
+        let direction: ScrollDirection = self.folioReader.needsRTLChange
+            ? .positive(withConfiguration: self.readerConfig)
+            : .negative(withConfiguration: self.readerConfig)
 
+        // scroll to bottom when scroll direction is negative
         if (self.folioReader.readerCenter?.pageScrollDirection == direction &&
             self.folioReader.readerCenter?.isScrolling == true &&
             self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
@@ -415,13 +418,26 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
      */
     open func scrollPageToBottom() {
         guard let webView = webView else { return }
-        let bottomOffset = readerConfig.isDirection(
+
+        if webView.scrollView.contentSize.width > webView.scrollView.frame.width {
+            _scrollPageToBottom()
+        } else {
+            // 首次加载 contentSize 可能计算不正确，此时延迟操作
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                self._scrollPageToBottom()
+            }
+        }
+    }
+
+    private func _scrollPageToBottom() {
+        guard let webView = webView else { return }
+
+        let bottomOffset = self.readerConfig.isDirection(
             CGPoint(x: 0, y: webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
             CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0),
             CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0)
         )
-
-        if bottomOffset.forDirection(withConfiguration: readerConfig) >= 0 {
+        if bottomOffset.forDirection(withConfiguration: self.readerConfig) >= 0 {
             webView.stringByEvaluatingJavaScript(
                 from: "window.scrollTo(\(bottomOffset.x), \(bottomOffset.y));"
             )

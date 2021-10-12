@@ -432,7 +432,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let reuseableCell = collectionView.dequeueReusableCell(withReuseIdentifier: kReuseCellIdentifier, for: indexPath) as? FolioReaderPage
+        let reuseableCell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: kReuseCellIdentifier, for: indexPath
+        ) as? FolioReaderPage
         return self.configure(readerPageCell: reuseableCell, atIndexPath: indexPath)
     }
 
@@ -490,11 +492,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
-        if indexPath.item + 1 == currentPageNumber - 1,
-           readerConfig.scrollDirection == .horizontal,
-           collectionView.isTracking {
-            shouldScrollToBottom = true
-        }
         return cell
     }
 
@@ -1443,11 +1440,6 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
         if readerConfig.scrollDirection == .horizontalWithVerticalContent,
             let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
             page.webView?.scrollView.setContentOffset(offsetPoint, animated: false)
-        }
-
-        if shouldScrollToBottom {
-            page.scrollPageToBottom()
-            shouldScrollToBottom = false
         }
 
         // Pass the event to the centers `pageDelegate`
