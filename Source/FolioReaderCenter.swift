@@ -490,8 +490,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
-        if indexPath.item + 1 < currentPageNumber,
-           readerConfig.scrollDirection == .horizontal {
+        if indexPath.item + 1 == currentPageNumber - 1,
+           readerConfig.scrollDirection == .horizontal,
+           collectionView.isTracking {
             shouldScrollToBottom = true
         }
         return cell
