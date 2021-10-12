@@ -78,6 +78,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     fileprivate var isFirstLoad = true
     fileprivate var currentWebViewScrollPositions = [Int: CGPoint]()
     fileprivate var currentOrientation: UIInterfaceOrientation?
+    /// scroll to bottom when load previous page in horizonal mode
+    fileprivate var shouldScrollToBottom: Bool = false
 
     fileprivate var readerConfig: FolioReaderConfig {
         guard let readerContainer = readerContainer else { return FolioReaderConfig() }
@@ -488,6 +490,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
+        if indexPath.item + 1 < currentPageNumber,
+           readerConfig.scrollDirection == .horizontal {
+            shouldScrollToBottom = true
+        }
         return cell
     }
 
@@ -814,7 +820,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 completion?()
                 return
         }
-        
+
         let cellSize = cell.frame.size
         let contentOffsetX = contentOffset.x + cellSize.width
         
@@ -1433,11 +1439,16 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
             tempFragment = nil
         }
         
-        if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
+        if readerConfig.scrollDirection == .horizontalWithVerticalContent,
             let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
             page.webView?.scrollView.setContentOffset(offsetPoint, animated: false)
         }
-        
+
+        if shouldScrollToBottom {
+            page.scrollPageToBottom()
+            shouldScrollToBottom = false
+        }
+
         // Pass the event to the centers `pageDelegate`
         pageDelegate?.pageDidLoad?(page)
     }
