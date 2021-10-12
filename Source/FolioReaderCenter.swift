@@ -288,7 +288,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
-    func reloadData() {
+    func reloadData(jumpToId id: String? = nil) {
         self.loadingView.stopAnimating()
         self.totalPages = book.spine.spineReferences.count
 
@@ -296,10 +296,15 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.configureNavBarButtons()
         self.setCollectionViewProgressiveDirection()
 
-        if self.readerConfig.loadSavedPositionForCurrentBook {
-            guard let position = folioReader.savedPositionForCurrentBook, let pageNumber = position["pageNumber"] as? Int, pageNumber > 0 else {
-                self.currentPageNumber = 1
-                return
+        if let id = id, let page = findPageByResourceId(id) {
+            self.changePageWith(page: page)
+            self.currentPageNumber = page
+        } else if self.readerConfig.loadSavedPositionForCurrentBook {
+            guard
+                let position = folioReader.savedPositionForCurrentBook,
+                let pageNumber = position["pageNumber"] as? Int, pageNumber > 0 else {
+                    self.currentPageNumber = 1
+                    return
             }
 
             self.changePageWith(page: pageNumber)
@@ -970,6 +975,20 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             count += 1
         }
         return count
+    }
+
+    /**
+     Find a page by resource id.
+     */
+    public func findPageByResourceId(_ id: String) -> Int? {
+        var count = 1
+        for item in self.book.spine.spineReferences {
+            if item.resource.id == id {
+                return count
+            }
+            count += 1
+        }
+        return nil
     }
 
     /**

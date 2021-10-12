@@ -26,6 +26,8 @@ open class FolioReaderContainer: UIViewController {
     public var readerConfig: FolioReaderConfig
     public var folioReader: FolioReader
 
+    private let jumpToId: String?
+
     fileprivate var errorOnLoad = false
 
     // MARK: - Init
@@ -38,13 +40,21 @@ open class FolioReaderContainer: UIViewController {
     ///   - path: The ePub path on system. Must not be nil nor empty string.
 	///   - unzipPath: Path to unzip the compressed epub.
     ///   - removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-    public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, unzipPath: String? = nil, removeEpub: Bool = true) {
+    public init(
+        withConfig config: FolioReaderConfig,
+        folioReader: FolioReader,
+        epubPath path: String,
+        unzipPath: String? = nil,
+        removeEpub: Bool = true,
+        jumpToId id: String? = nil
+    ) {
         self.readerConfig = config
         self.folioReader = folioReader
         self.epubPath = path
 		self.unzipPath = unzipPath
         self.shouldRemoveEpub = removeEpub
         self.book = FRBook()
+        self.jumpToId = id
 
         super.init(nibName: nil, bundle: Bundle.frameworkBundle())
 
@@ -69,6 +79,7 @@ open class FolioReaderContainer: UIViewController {
         self.epubPath = ""
         self.shouldRemoveEpub = false
         self.book = FRBook()
+        self.jumpToId = nil
 
         super.init(coder: aDecoder)
 
@@ -170,7 +181,7 @@ open class FolioReaderContainer: UIViewController {
                     if self.book.hasAudio || self.readerConfig.enableTTS {
                         self.addAudioPlayer()
                     }
-                    self.centerViewController?.reloadData()
+                    self.centerViewController?.reloadData(jumpToId: self.jumpToId)
                     self.folioReader.isReaderReady = true
                     self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
                 }
