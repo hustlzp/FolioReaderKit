@@ -10,7 +10,7 @@ import UIKit
 
 class PageViewController: UIPageViewController {
 
-    var segmentedControl: UISegmentedControl!
+//    var segmentedControl: UISegmentedControl!
     var viewList = [UIViewController]()
     var segmentedControlItems = [String]()
     var viewControllerOne: UIViewController!
@@ -38,12 +38,12 @@ class PageViewController: UIPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        segmentedControl = UISegmentedControl(items: segmentedControlItems)
-        segmentedControl.addTarget(self, action: #selector(PageViewController.didSwitchMenu(_:)), for: UIControl.Event.valueChanged)
-        segmentedControl.selectedSegmentIndex = index
-        segmentedControl.setWidth(100, forSegmentAt: 0)
-        segmentedControl.setWidth(100, forSegmentAt: 1)
-        self.navigationItem.titleView = segmentedControl
+//        segmentedControl = UISegmentedControl(items: segmentedControlItems)
+//        segmentedControl.addTarget(self, action: #selector(PageViewController.didSwitchMenu(_:)), for: UIControl.Event.valueChanged)
+//        segmentedControl.selectedSegmentIndex = index
+//        segmentedControl.setWidth(100, forSegmentAt: 0)
+//        segmentedControl.setWidth(100, forSegmentAt: 1)
+//        self.navigationItem.titleView = segmentedControl
 
         viewList = [viewControllerOne, viewControllerTwo]
 
@@ -104,7 +104,7 @@ extension PageViewController: UIPageViewControllerDelegate {
 
         if finished && completed {
             let viewController = pageViewController.viewControllers?.last
-            segmentedControl.selectedSegmentIndex = viewList.firstIndex(of: viewController!)!
+//            segmentedControl.selectedSegmentIndex = viewList.firstIndex(of: viewController!)!
         }
     }
 }
